@@ -561,6 +561,18 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
         }
     end
 
+    -- Check if the auction item is usuable
+    local canUse = false
+    local auctionInfo = CLM.MODULES.BiddingManager:GetAuctionInfo()
+    if auctionInfo then
+        for _, auctionItem in pairs(auctionInfo:GetItems()) do
+            if GetIgnoreUnusable(self) and not auctionItem:GetCanUse() then
+                canUse = true
+                break
+            end
+        end
+    end
+
     local values = self.auctionItem and self.auctionItem:GetValues() or emptyTierValues
     if usedTiers then
         for _,tier in ipairs(usedTiers) do
@@ -581,7 +593,8 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
                     order = offset
                 }
                 offset = offset + 1
-                numButtons = numButtons + 1
+                numButtons = numButtons + 1,
+                disabled = canUse
             end
         end
     end
@@ -602,7 +615,8 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
             CloseOnBid(self)
         end),
         width = cancelPassWidth,
-        order = offset
+        order = offset,
+        disabled = canUse
     }
     options.cancel = {
         name = CLM.L["Cancel"],
@@ -615,7 +629,8 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
         end),
         -- disabled = (function() return CONSTANTS.AUCTION_TYPES_OPEN[self.auctionType] and (itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING) end),
         width = cancelPassWidth,
-        order = offset + 1
+        order = offset + 1,
+        disabled = canUse
     }
 
     numRows = 0
