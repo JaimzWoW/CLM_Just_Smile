@@ -166,7 +166,13 @@ local function AddItemToAuctionList(self, item, callbackFn)
 
     -- Check if auction is in progress
     if self:IsAuctionInProgress() then
-        LOG:Message(CLM.L["Unable to add an item since another item is currently auctioned!"])
+        LOG:Message(CLM.L["Unable to add an item since another item is in process!"])
+        return
+    end
+
+    -- Check if current auction has finished
+    if not self.currentAuction:CanAddItems() then
+        LOG:Message(CLM.L["You need to award, disenchant or clear the auction first!"])
         return
     end
 
@@ -211,12 +217,6 @@ local function AddItemToAuctionList(self, item, callbackFn)
         callbackFn(auctionItem)
 
         -- End
-        return
-    end
-
-    -- Check if current auction has finished
-    if not self.currentAuction:CanAddItems() then
-        LOG:Message(CLM.L["You need to award or clear the auction first!"])
         return
     end
 
