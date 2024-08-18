@@ -592,7 +592,7 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
                     width = row_width,
                     order = offset
                 }
-                offset = offset + 1
+                offset = offset + 1,
                 numButtons = numButtons + 1,
                 disabled = canUse
             end
