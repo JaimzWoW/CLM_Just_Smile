@@ -50,7 +50,7 @@ local function InitializeDB(self)
     self.db = CLM.MODULES.Database:GUI('bidding', {
         location = {nil, nil, "CENTER", 0, 0 },
         scale = 1,
-        barWidth = 340,
+        barWidth = 600,
         closeOnBid = false,
         advanceOnBid = true,
         hideInCombat = true,
@@ -67,7 +67,7 @@ local function ShowTestBar(self)
         {
             anchor = self.db.barLocation,
             width = self.db.barWidth,
-            height = 25,
+            height = 30,
         }
     )
 end

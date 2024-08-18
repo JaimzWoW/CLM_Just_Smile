@@ -52,6 +52,10 @@ local function Create(self, item, auction, options)
         RecolorBar(self)
     end)
 
+    -- Set the font size
+    self.bar.candyBarLabel:SetFont(STANDARD_TEXT_FONT, 14)
+    self.bar.candyBarDuration:SetFont(STANDARD_TEXT_FONT, 14)
+
     self.parent = CreateFrame("Frame", nil, UIParent)
     -- local tint = self.parent:CreateTexture(nil, "BACKGROUND")
     -- tint:SetAllPoints()
