@@ -170,7 +170,7 @@ local function AddItemToAuctionList(self, item, callbackFn)
         return
     end
 
-    -- Check if current auction has finished
+    -- Check if current auction is finished
     if not self.currentAuction:CanAddItems() then
         LOG:Message(CLM.L["You need to award, disenchant or clear the auction first!"])
         return
