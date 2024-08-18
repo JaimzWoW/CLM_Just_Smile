@@ -566,7 +566,7 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
     local auctionInfo = CLM.MODULES.BiddingManager:GetAuctionInfo()
     if auctionInfo then
         for _, auctionItem in pairs(auctionInfo:GetItems()) do
-            if GetIgnoreUnusable(self) and not auctionItem:GetCanUse() then
+            if GetIgnoreUnusable(self) and not self.auctionItem:GetCanUse() then
                 canUse = true
                 break
             end
