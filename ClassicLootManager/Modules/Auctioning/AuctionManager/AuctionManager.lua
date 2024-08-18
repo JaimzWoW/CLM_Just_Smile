@@ -214,6 +214,12 @@ local function AddItemToAuctionList(self, item, callbackFn)
         return
     end
 
+    -- Check if current auction has finished
+    if not self.currentAuction:CanAddItems() then
+        LOG:Message(CLM.L["You need to award or clear the auction first!"])
+        return
+    end
+
     -- Add the new item to the auction
     local auctionItem = auctionInfo:AddItem(item)
     if auctionItem then
