@@ -590,11 +590,11 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
                         CloseOnBid(self)
                     end),
                     width = row_width,
-                    order = offset
+                    order = offset,
+                    disabled = canUse
                 }
-                offset = offset + 1,
-                numButtons = numButtons + 1,
-                disabled = canUse
+                offset = offset + 1
+                numButtons = numButtons + 1
             end
         end
     end
