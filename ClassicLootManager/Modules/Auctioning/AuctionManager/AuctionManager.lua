@@ -1432,7 +1432,7 @@ CONSTANTS.AUCTION_COMM = {
         [11] = CLM.L["Off-spec bidding not allowed"],
         [12] = CLM.L["Invalid item"],
         [13] = CLM.L["Changing bid from Main-spec to Off-Spec not allowed"],
-        [14] = CLM.L["You are currently in your trial period, so you are not eligible to bid on Best-in-Slot (BIS) loot."]
+        [14] = CLM.L["You are currently in your trial period, so you are not eligible to bid on Best-in-Slot (BIS) loot"]
     }
 }
 
