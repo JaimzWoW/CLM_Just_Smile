@@ -30,7 +30,7 @@ local function InitializeDB(self)
         defaultRemoveOnAward = true,
         notes = {},
         includePasses = true,
-        includeCancels = false,
+        includeCancels = true,
         ignoredClasses = {
             false, false, false, false,
             false, false, false, true,

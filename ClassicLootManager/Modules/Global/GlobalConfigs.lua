@@ -10,8 +10,8 @@ local GlobalConfigs = {}
 function GlobalConfigs:Initialize()
     self.db = CLM.MODULES.Database:Personal('global', {
         uiscale = 1.0,
-        announce_award_to_guild = true,
-        announce_loot_to_raid = false,
+        announce_award_to_guild = false,
+        announce_loot_to_raid = true,
         announce_loot_to_raid_owner_only = true,
         announce_loot_to_raid_level = 3,
         wowdkpbot_integration = false,

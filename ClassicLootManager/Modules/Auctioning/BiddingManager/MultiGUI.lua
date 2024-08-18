@@ -57,8 +57,8 @@ local function InitializeDB(self)
         autoOpen = true,
         autoUpdateBidValue = false,
         includePasses = true,
-        includeCancels = false,
-        ignoreUnusable = false
+        includeCancels = true,
+        ignoreUnusable = true
     })
 end
 
