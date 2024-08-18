@@ -109,7 +109,7 @@ local function UpdateAuctionTime(self)
     end
 end
 
-function AuctionInfo:NewShim(auctionType, mode, useOS, namedButtons, increment, fieldNames)
+function AuctionInfo:NewShim(auctionType, mode, itemQueueMode, useOS, useTrials, namedButtons, increment, fieldNames)
     local o = {}
     setmetatable(o, self)
 
@@ -140,7 +140,9 @@ function AuctionInfo:NewShim(auctionType, mode, useOS, namedButtons, increment, 
     -- Overwrite new ones
     self.auctionType = auctionType
     self.mode = mode
+    self.itemQueueMode = itemQueueMode
     self.useOS = useOS
+    self.useTrials = useTrials
     self.namedButtons = namedButtons
 
     self.increment = increment
@@ -148,7 +150,9 @@ function AuctionInfo:NewShim(auctionType, mode, useOS, namedButtons, increment, 
 
     o.GetType = _GetType
     o.GetMode = _GetMode
+    o.GetItemQueueMode = _GetItemQueueMode
     o.GetUseOS = _GetUseOS
+    o.GetUseTrials = _GetUseTrials
     o.GetNamedButtonsMode = _GetNamedButtonsMode
     o.GetFieldName = _GetFieldName
     o.GetIncrement = _GetIncrement
@@ -471,8 +475,16 @@ function AuctionInfo:GetMode()
     return self.configuration:Get("itemValueMode")
 end
 
+function AuctionInfo:GetItemQueueMode()
+    return self.configuration:Get("itemQueueMode")
+end
+
 function AuctionInfo:GetUseOS()
     return self.configuration:Get("useOS")
+end
+
+function AuctionInfo:GetUseTrials()
+    return self.configuration:Get("useTrials")
 end
 
 function AuctionInfo:GetAlwaysAllowBaseBids()

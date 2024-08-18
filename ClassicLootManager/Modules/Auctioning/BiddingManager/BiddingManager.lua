@@ -209,7 +209,9 @@ local function StartAuction(self, data)
             auction = CLM.MODELS.AuctionInfo:NewShim(
                 data:GetType(),
                 data:GetMode(),
+                data:GetItemQueueMode(),
                 data:GetUseOS(),
+                data:GetUseTrials(),
                 data:GetNamedButtonsMode(),
                 data:GetIncrement(),
                 data:GetFieldNames()

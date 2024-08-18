@@ -639,6 +639,14 @@ local function GenerateAuctionOptions(self)
 
     local auction = CLM.MODULES.BiddingManager:GetAuctionInfo()
 
+     -- Check if the loot queue mode is disabled (true)
+    local itemQueueMode = false
+    if auction then
+        if auction:GetItemQueueMode() then
+            itemQueueMode = true
+        end
+    end
+
     -- local shortItemLink = "item:" .. tostring(itemId)
     local namedButtonsMode = auction and auction:GetNamedButtonsMode() or false
 
@@ -670,7 +678,8 @@ local function GenerateAuctionOptions(self)
                 CloseOnBid(self)
             end),
             width = (namedButtonsMode and 3 or 1.5)*rowMultiplierBy9,
-            order = 4
+            order = 4,
+            disabled = itemQueueMode
         },
     }
 

@@ -46,7 +46,9 @@ local function GetConfig(auction)
         r = auction:GetRoster():UID(),
         t = auction:GetType(),
         m = auction:GetMode(),
+        o = auction:GetItemQueueMode(),
         o = auction:GetUseOS(),
+        o = auction:GetUseTrials(),
         n = auction:GetNamedButtonsMode(),
         i = auction:GetIncrement(),
         f = {}
@@ -102,7 +104,15 @@ function AuctionCommStartAuction:GetMode()
     return self.c.m or CONSTANTS.ITEM_VALUE_MODE.ASCENDING
 end
 
+function AuctionCommStartAuction:GetItemQueueMode()
+    return self.c.o or true
+end
+
 function AuctionCommStartAuction:GetUseOS()
+    return self.c.o or true
+end
+
+function AuctionCommStartAuction:GetUseTrials()
     return self.c.o or true
 end
 

@@ -211,6 +211,12 @@ function RosterManagerOptions:Initialize()
         auction_dynamic_item_values_set = (function(name, value)
             SetRosterOption(name, "dynamicValue", value)
         end),
+        auction_item_queue_mode_get = (function(name)
+            return GetRosterOption(name, "itemQueueMode")
+        end),
+        auction_item_queue_mode_set = (function(name, value)
+            SetRosterOption(name, "itemQueueMode", value)
+        end),
         auction_base_always_get = (function(name)
             return GetRosterOption(name, "baseAlways")
         end),
@@ -246,6 +252,12 @@ function RosterManagerOptions:Initialize()
         end),
         auction_use_os_set = (function(name, value)
             SetRosterOption(name, "useOS", value)
+        end),
+        auction_use_trials_get = (function(name)
+            return GetRosterOption(name, "useTrials")
+        end),
+        auction_use_trials_set = (function(name, value)
+            SetRosterOption(name, "useTrials", value)
         end),
         auction_zero_sum_bank_get = (function(name)
             return GetRosterOption(name, "zeroSumBank")
@@ -1095,6 +1107,14 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                         disabled = disableManage,
                         width = 1
                     },
+                    item_queue_mode = {
+                        name = CLM.L["Disable item queue mode"],
+                        desc = CLM.L["Disable item queue mode to only auction a single item each time."],
+                        type = "toggle",
+                        disabled = disableManage,
+                        width = 2,
+                        order = 6.1
+                    },
                     bidding_header = {
                         name = CLM.L["Bidding"],
                         type = "header",
@@ -1109,6 +1129,14 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                         pattern = CONSTANTS.REGEXP_FLOAT,
                         width = 1,
                         order = 11
+                    },
+                    use_trials = {
+                        name = CLM.L["Trials"],
+                        desc = CLM.L["Enabling this allows Trials to bid on all items except for [Max]."],
+                        type = "toggle",
+                        disabled = disableManage,
+                        width = 1,
+                        order = 12
                     },
                     use_os = {
                         name = CLM.L["OS"],

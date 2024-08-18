@@ -159,17 +159,68 @@ end
 
 -- If using custom callback, function, then it is responsible for doing refresh
 local function AddItemToAuctionList(self, item, callbackFn)
-    callbackFn = callbackFn or DefaultCallback
+   callbackFn = callbackFn or DefaultCallback
 
-    local auctionInfo = self.currentAuction
-    if not auctionInfo:CanAddItems() then
-        auctionInfo = self.pendingAuction
-        callbackFn = PendingAuctionCallback
+    local auctionInfo = self.currentAuction or self.pendingAuction
+    local auctionItem = nil
+
+    -- Check if auction is in progress
+    if self:IsAuctionInProgress() then
+        LOG:Message(CLM.L["Unable to add an item since another item is currently auctioned!"])
+        return
     end
 
+    -- Check if setting is enabled
+    if auctionInfo:GetItemQueueMode() then
+        -- Check if there are more items in the Auction list
+        if auctionInfo:GetItemCount() >= 1 then
+             -- Check for duplicate item
+            local existingItems = auctionInfo:GetItems()
+            for _, existingItem in ipairs(existingItems) do
+                if existingItem:GetItemID() == item:GetItemID() then
+                    --LOG:Message("Item is already in the auction list: %s", item:GetItemLink())
+                    return
+                end
+            end
+
+            -- Clear the Auction list
+            local existingItems = auctionInfo:GetItems() 
+
+            local function tableToString(tbl)
+                local result = {}
+                for key, value in pairs(tbl) do
+                    table.insert(result, tostring(key) .. ": " .. tostring(value))
+                end
+                return "{" .. table.concat(result, ", ") .. "}"
+            end
+
+            for _, existingItem in ipairs(existingItems) do
+                --LOG:Message("Delete item: %s", tableToString(existingItem))
+                self:RemoveItemFromCurrentAuction(existingItem)
+            end
+        end
+
+        -- Add the new item to the auction
+        auctionItem = self.currentAuction:AddItem(item)
+        if auctionItem then
+            auctionItem:SetNote(self.db.notes[item:GetItemID()])
+            --LOG:Message("Added new item to auction: %s", item:GetItemLink())
+        else
+            --LOG:Message("Failed to add new item to auction: %s", item:GetItemLink())
+        end
+        callbackFn(auctionItem)
+
+        -- End
+        return
+    end
+
+    -- Add the new item to the auction
     local auctionItem = auctionInfo:AddItem(item)
     if auctionItem then
         auctionItem:SetNote(self.db.notes[item:GetItemID()])
+        --LOG:Message("Added new item to auction: %s", item:GetItemLink())
+    else
+        --LOG:Message("Failed to add new item to auction: %s", item:GetItemLink())
     end
     callbackFn(auctionItem)
 end
@@ -1052,7 +1103,20 @@ local function ValidateBid(auction, uid, item, name, userResponse)
     -- allow negative bidders
     local current = roster:Standings(GUID)
     local minimumPoints = auction:GetMinimumPoints()
-    if current < minimumPoints then return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BELOW_MIN_BIDDER end
+    -- Check if the current points are less than the minimum required points
+    if current < minimumPoints then
+        -- Check if the option "Trial" is enabled (only supported for "Ascending" and "Tiered" mode)
+        if auction:GetUseTrials() then
+            -- Allow bidding only for non-BIS items (based on the [Max] button)
+            if auction:GetNamedButtonsMode() then
+                if userResponse:Type() == "x" then
+                    return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.TRIAL_PERIOD
+                end
+            end
+        else
+            return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BELOW_MIN_BIDDER
+        end
+    end
     -- allow negative standings after bid
     local new = UTILS.round(current - value, auction:GetRounding())
     if (new < minimumPoints) and not auction:GetAllowBelowMinStandings() and isDKP then
@@ -1335,6 +1399,7 @@ CONSTANTS.AUCTION_COMM = {
         OFF_SPEC_NOT_ALLOWED = 11,
         INVALID_ITEM = 12,
         SPEC_CHANGE = 13,
+        TRIAL_PERIOD = 14
     },
     DENY_BID_REASONS = UTILS.Set({
         1, -- NOT_IN_ROSTER
@@ -1350,6 +1415,8 @@ CONSTANTS.AUCTION_COMM = {
         11,-- OFF_SPEC_NOT_ALLOWED
         12,-- INVALID_ITEM
         13,-- SPEC_CHANGE
+        14,-- TRIAL_PERIOD
+
     }),
     DENY_BID_REASONS_STRING = {
         [1] = CLM.L["Not in a roster"],
@@ -1364,7 +1431,8 @@ CONSTANTS.AUCTION_COMM = {
         [10] = CLM.L["Passing after bidding not allowed"],
         [11] = CLM.L["Off-spec bidding not allowed"],
         [12] = CLM.L["Invalid item"],
-        [13] = CLM.L["Changing bid from Main-spec to Off-Spec not allowed"]
+        [13] = CLM.L["Changing bid from Main-spec to Off-Spec not allowed"],
+        [14] = CLM.L["You are currently in your trial period, so you are not eligible to bid on Best-in-Slot (BIS) loot."]
     }
 }
 
