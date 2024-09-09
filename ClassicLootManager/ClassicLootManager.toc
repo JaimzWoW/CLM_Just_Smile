@@ -4,7 +4,7 @@
 ## Author: Lantis
 ## IconTexture: Interface/AddOns/ClassicLootManager/Media/Icons/clm-dark-32.png
 ## AddonCompartmentFunc: CLM_Binding_ToggleGUI_UnifiedGUI
-## Version: v5.2.1
+## Version: v5.2.3
 ## OptionalDeps: LibStub, ElvUI, Gargul, RCLootCouncil_Classic, Ace3, ViragDevTool
 ## X-Donate: https://www.patreon.com/classiclootmanager
 ## X-License: Apache2
